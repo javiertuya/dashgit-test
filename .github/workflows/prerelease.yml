@@ -1,0 +1,53 @@
+# Deploy app as a prerelease using a branch from the dashgit repo
+# This is same scritp than release dashgit, but
+# - is triggered manually specifying the name of the branch
+# - version is branch-timestamp
+# - published in dashgit-test.javiertuya.github.io
+name: prerelease
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name to publish'     
+        required: true
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read  
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment, but do not cancel in-progress runs
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  prerelease-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Checkout ${{ github.event.inputs.branch }}
+        run: git clone https://github.com/javiertuya/dashgit.git --branch "${{ github.event.inputs.branch }}"
+
+      - name: Prepare release
+        working-directory: dashgit/dashgit-web
+        run: |
+          chmod u+rx ./prepare-release.sh
+          ./prepare-release.sh "PRERELEASE VERSION ${{ github.event.inputs.branch }}-`date +"%s"`"
+
+      - name: Upload artifact to deploy
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          path: 'dashgit/dashgit-web/dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5
