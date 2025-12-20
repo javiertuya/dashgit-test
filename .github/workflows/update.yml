@@ -16,7 +16,7 @@ jobs:
 
       - name: Install GitLab CLI
         run: |
-          curl -L -o glab.tar.gz https://gitlab.com/cli/cli/-/releases/latest/downloads/glab-linux-amd64.tar.gz
+          curl -L -o glab.tar.gz https://gitlab.com/cli/cli/-/releases/v1.40.0/downloads/glab-linux-amd64.tar.gz
           if tar -xf glab.tar.gz 2>/dev/null; then
             mv $(find . -name glab -type f) glab
           else
