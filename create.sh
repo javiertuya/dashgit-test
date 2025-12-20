@@ -63,8 +63,11 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   done
 
   # Commit and push
+  echo "commiting changes to $BRANCH_NAME"
   git commit -m "$COMMIT_MSG"
+  echo "pushing changes to $BRANCH_NAME"
   git push -f origin "$BRANCH_NAME"
+  echo "Creating Merge Request for $BRANCH_NAME"
 
   # Create MR using glab CLI
 #  glab mr create --title "$PR_TITLE" --description "$PR_BODY" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
