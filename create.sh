@@ -77,7 +77,7 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   echo "***************PR Body: $PR_BODY"
   PR_BODY_ESCAPED="${PR_BODY//</\\<}"
   PR_BODY_ESCAPED="${PR_BODY_ESCAPED//>/\\>}"
-  ../glab mr create --title "$PR_TITLE" --description "$PR_BODY_ESCAPED" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
+  /snap/bin/glab mr create --title "$PR_TITLE" --description "$PR_BODY_ESCAPED" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
 
   # Return to main branch for next PR
   git checkout main
