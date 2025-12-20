@@ -32,8 +32,8 @@ jq -c 'select(.type == "create_pull_request")' "$INPUT" | while read -r event; d
   echo "  Base SHA: $BASE_SHA"
   echo "  Branch: $BRANCH_NAME"
 
-  echo "  Commit: $COMMIT_MSG"
-  echo "  Body: $PR_BODY"
+echo "  Commit: $COMMIT_MSG"
+#echo "  Body: $PR_BODY"
 continue
 
   # Create and checkout new branch from base commit
