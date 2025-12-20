@@ -1,0 +1,33 @@
+name: Run Dependabot CLI
+on:
+  workflow_dispatch:
+
+jobs:
+  run-dependabot:
+    permissions:
+      # Important not to give Dependabot write access in case it runs arbitrary
+      # code as some ecosystems do.
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download CLI
+        env:
+          # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo dependabot/cli -p "*linux-amd64.tar.gz"
+          tar xzvf *.tar.gz >/dev/null 2>&1
+          ./dependabot --version
+
+      - name: Run Dependabot
+        env:
+          # GITHUB_TOKEN shows an example of how Dependabot CLI can be used with secrets.
+          GITHUB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          ./dependabot update -f jobs/maven.gitlab.com.yml --timeout 20m >> result.json || true
+
+      - name: Create PRs
+        env:
+          # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
+          GH_TOKEN: ${{ github.token }}
+        run: bash create.sh result.json

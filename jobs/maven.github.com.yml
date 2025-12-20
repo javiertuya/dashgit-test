@@ -1,0 +1,17 @@
+job:
+  package-manager: maven
+  allowed-updates:
+    - dependency-type: direct
+      update-type: all
+  source:
+    provider: gitlab
+    hostname: gitlab.com
+    api-endpoint: https://gitlab.com/api/v4/
+    repo: javiertuya/dashgit-test
+    directory: /
+    branch: test-cli
+credentials:
+  - type: git_source
+    host: gitlab.com
+    username: javiertuya
+    password: $GITLAB_TOKEN
