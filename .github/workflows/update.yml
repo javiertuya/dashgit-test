@@ -18,7 +18,7 @@ jobs:
         run: |
           curl -L -o glab.tar.gz https://gitlab.com/cli/cli/-/releases/latest/downloads/glab-linux-amd64.tar.gz
           tar -xzf glab.tar.gz
-          sudo mv glab /usr/local/bin/
+          sudo mv $(find . -name glab -type f) /usr/local/bin/
 
       - name: Download CLI
         env:
