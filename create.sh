@@ -25,7 +25,6 @@ rm -rf "$REPO_DIR"
 git clone "$GITLAB_REPO_URL" "$REPO_DIR"
 cd "$REPO_DIR"
 ls -la
-ls -la "$REPO_DIR"
 
 git config --global user.email "support@gitlab.com"
 git config --global user.name "Dependabot Standalone"
