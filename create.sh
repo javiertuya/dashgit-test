@@ -15,7 +15,19 @@ fi
 
 INPUT="$1"
 
-git config --global user.email "support@github.com"
+GITLAB_TOKEN="${GITLAB_TOKEN:-}"
+GITLAB_REPO="${GITLAB_REPO:-javiertuya/dashgit-test}"
+GITLAB_REPO_URL="https://oauth2:$GITLAB_TOKEN@$GITLAB_REPO"
+REPO_DIR="gitlab-repo"
+
+# Clean and clone the GitLab repository into a subdirectory
+rm -rf "$REPO_DIR"
+git clone "$GITLAB_REPO_URL" "$REPO_DIR"
+cd "$REPO_DIR"
+ls -la
+ls -la "$REPO_DIR"
+
+git config --global user.email "support@gitlab.com"
 git config --global user.name "Dependabot Standalone"
 git config --global advice.detachedHead false
 
@@ -31,10 +43,6 @@ jq -c 'select(.type == "create_pull_request")' "$INPUT" | while read -r event; d
   echo "Processing PR: $PR_TITLE"
   echo "  Base SHA: $BASE_SHA"
   echo "  Branch: $BRANCH_NAME"
-
-echo "  Commit: $COMMIT_MSG"
-#echo "  Body: $PR_BODY"
-continue
 
   # Create and checkout new branch from base commit
   git fetch origin
@@ -58,9 +66,11 @@ continue
   git commit -m "$COMMIT_MSG"
   git push -f origin "$BRANCH_NAME"
 
-  # Create PR using gh CLI
-  gh pr create --title "$PR_TITLE" --body "$PR_BODY" --base main --head "$BRANCH_NAME" --label dependencies || true
+  # Create MR using glab CLI
+#  glab mr create --title "$PR_TITLE" --description "$PR_BODY" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
 
   # Return to main branch for next PR
   git checkout main
 done
+
+cd ..
