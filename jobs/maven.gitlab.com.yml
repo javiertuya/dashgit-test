@@ -9,7 +9,7 @@ job:
     api-endpoint: https://gitlab.com/api/v4/
     repo: javiertuya/dashgit-test
     directory: /
-    branch: test-cli
+    branch: main
 credentials:
   - type: git_source
     host: gitlab.com
