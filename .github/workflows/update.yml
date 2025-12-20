@@ -11,6 +11,9 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout GitHub repo
+        uses: actions/checkout@v6
+
       - name: Download CLI
         env:
           # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
