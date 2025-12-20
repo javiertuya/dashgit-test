@@ -17,7 +17,7 @@ jobs:
       - name: Install GitLab CLI
         run: |
           curl -L -o glab.tar.gz https://gitlab.com/cli/cli/-/releases/latest/downloads/glab-linux-amd64.tar.gz
-          tar -xzf glab.tar.gz
+          tar -xf glab.tar.gz
           sudo mv $(find . -name glab -type f) /usr/local/bin/
 
       - name: Download CLI
