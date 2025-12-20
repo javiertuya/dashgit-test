@@ -16,6 +16,10 @@ fi
 INPUT="$1"
 
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
+if [ -z "$GITLAB_TOKEN" ]; then
+  echo "Error: GITLAB_TOKEN environment variable is not set or empty."
+  exit 1
+fi
 GITLAB_REPO="${GITLAB_REPO:-gitlab.com/javiertuya/dashgit-test}"
 GITLAB_REPO_URL="https://oauth2:$GITLAB_TOKEN@$GITLAB_REPO"
 REPO_DIR="gitlab-repo"
