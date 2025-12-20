@@ -73,11 +73,14 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   git push -f origin "$BRANCH_NAME"
   echo "Creating Merge Request for $BRANCH_NAME"
 
-  # Create MR using glab CLI
-  echo "***************PR Body: $PR_BODY"
-  PR_BODY_ESCAPED="${PR_BODY//</\\<}"
-  PR_BODY_ESCAPED="${PR_BODY_ESCAPED//>/\\>}"
-  /snap/bin/glab mr create --title "$PR_TITLE" --description "$PR_BODY_ESCAPED" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
+  # Create MR using GitLab API
+  project="javiertuya/dashgit-test"
+  project_id=${project//\//%2F}
+  curl -X POST \
+    -H "Authorization: Bearer $GITLAB_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{\"title\":\"$PR_TITLE\",\"description\":\"$PR_BODY\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\"}" \
+    "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || true
 
   # Return to main branch for next PR
   git checkout main

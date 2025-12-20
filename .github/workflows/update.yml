@@ -14,9 +14,6 @@ jobs:
       - name: Checkout GitHub repo
         uses: actions/checkout@v6
 
-      - name: Install GitLab CLI
-        run: sudo snap install glab --classic
-
       - name: Download CLI
         env:
           # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
