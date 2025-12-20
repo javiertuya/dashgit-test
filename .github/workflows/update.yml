@@ -1,6 +1,7 @@
 name: Run Dependabot CLI
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   run-dependabot:
