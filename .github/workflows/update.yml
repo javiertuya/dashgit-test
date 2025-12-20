@@ -14,6 +14,11 @@ jobs:
       - name: Checkout GitHub repo
         uses: actions/checkout@v6
 
+      - name: Install GitLab CLI
+        run: |
+          curl -s https://gitlab.com/cli/cli/-/releases/latest/downloads/glab-linux-amd64.tar.gz | tar -xz
+          sudo mv glab /usr/local/bin/
+
       - name: Download CLI
         env:
           # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.

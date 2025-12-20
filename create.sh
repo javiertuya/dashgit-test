@@ -74,7 +74,7 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   echo "Creating Merge Request for $BRANCH_NAME"
 
   # Create MR using glab CLI
-#  glab mr create --title "$PR_TITLE" --description "$PR_BODY" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
+  glab mr create --title "$PR_TITLE" --description "$PR_BODY" --target-branch main --source-branch "$BRANCH_NAME" --label dependencies || true
 
   # Return to main branch for next PR
   git checkout main
