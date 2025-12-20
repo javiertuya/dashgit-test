@@ -16,7 +16,7 @@ fi
 INPUT="$1"
 
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
-GITLAB_REPO="${GITLAB_REPO:-https://gitlab.com/javiertuya/dashgit-test}"
+GITLAB_REPO="${GITLAB_REPO:-gitlab.com/javiertuya/dashgit-test}"
 GITLAB_REPO_URL="https://oauth2:$GITLAB_TOKEN@$GITLAB_REPO"
 REPO_DIR="gitlab-repo"
 
