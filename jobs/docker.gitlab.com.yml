@@ -4,7 +4,7 @@ job:
     - dependency-type: direct
       update-type: all
   ignore:
-    - dependency-name: "dotnet/aspnet"
+    - dependency-name: "mcr.microsoft.com/dotnet/aspnet"
       versions: ["9.x", "10.x"]
     - dependency-name: "gitlab/gitlab-ce"
       versions: [ "18.6.x" , "18.7.x" ]
