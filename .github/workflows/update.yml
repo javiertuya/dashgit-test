@@ -14,7 +14,12 @@ jobs:
       - name: Checkout GitHub repo
         uses: actions/checkout@v6
 
-      - name: Download CLI
+      - name: Prepare environment for nuget updates
+        uses: actions/setup-dotnet@v5
+        with:
+            dotnet-version: '8.0.x'
+
+      - name: Download Dependabot CLI
         env:
           # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
           GH_TOKEN: ${{ github.token }}
