@@ -28,4 +28,5 @@ echo ""
 $DEPENDABOT_CMD update -f update-job.yml --timeout 20m > update-result.json
 #cat update-result.json
 
-./create.sh update-result.json $2$3 $5 $7 $8
+# Two additional parameters (label and optional assignee)
+./create.sh update-result.json $2$3 $5 $7 $8 $9

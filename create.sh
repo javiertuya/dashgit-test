@@ -18,7 +18,8 @@ HOSTNAME="$2"
 REPO="$3"
 TARGET_BRANCH="$4"
 LABEL="$5"
-echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH , label: $LABEL ***"
+ASSIGNEE="$6"
+echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH , label: $LABEL, assignee: $ASSIGNEE ***"
 
 if [ -z "$HOSTNAME" ]; then
   echo "Error: HOSTNAME parameter is not set or empty."
@@ -35,6 +36,9 @@ fi
 if [ -z "$LABEL" ]; then
   echo "Error: LABEL parameter is not set or empty."
   exit 1
+fi
+if [ -z "$ASSIGNEE" ]; then # defaults to 0, no assignee
+  ASSIGNEE = 0
 fi
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
 if [ -z "$GITLAB_TOKEN" ]; then
@@ -108,7 +112,8 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
       --arg source_branch "$BRANCH_NAME" \
       --arg target_branch "$TARGET_BRANCH" \
       --arg labels "dependencies,$LABEL" \
-      '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: $labels, assignee_id: 810786, remove_source_branch: true}' | \
+      --arg assignee "$ASSIGNEE" \
+      '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: $labels, assignee_id: $assignee, remove_source_branch: true}' | \
     curl -X POST \
       -H "Authorization: Bearer $GITLAB_TOKEN" \
       -H "Content-Type: application/json" \
