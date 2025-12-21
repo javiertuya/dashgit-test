@@ -1,8 +1,8 @@
 job:
   package-manager: docker
-  allowed-updates:
-    - dependency-type: direct
-      update-type: all
+  #allowed-updates:
+  #  - dependency-type: direct
+  #    update-type: all
   ignore:
     - dependency-name: "dotnet/aspnet"
       versions: ">=9"
