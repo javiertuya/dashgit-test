@@ -24,5 +24,6 @@ echo "*** Begin dependabot CLI update using this job description:"
 cat update-job.yml
 echo ""
 
+# Dependabot will set the result in a json that will be used to create the MRs
 $DEPENDABOT_CMD update -f update-job.yml --timeout 20m > update-result.json
-./create.sh update-job.yml $2$3 $5
+./create.sh update-result.json $2$3 $5
