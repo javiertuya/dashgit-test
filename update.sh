@@ -5,10 +5,11 @@
 # Example usage:
 # ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java 0
 
-# Dependabot command is a global command if installed using go (in windows)
-DEPENDABOT_CMD=dependabot
-# But a local downloaded file in CI
-#DEPENDABOT_CMD=./dependabot
+if [ -f "dependabot"]; then # Dependabot command a local downloaded file in CI
+  DEPENDABOT_CMD=./dependabot
+else # But a global command that must be installed using go (in windows)
+  DEPENDABOT_CMD=dependabot
+fi
 # Clean temporary work files from previous executions
 rm -f update-result.json
 rm -f update-job.yml
