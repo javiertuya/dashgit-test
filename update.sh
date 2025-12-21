@@ -6,9 +6,9 @@
 # ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java 0
 
 # Dependabot command is a global command if installed using go (in windows)
-#DEPENDABOT_CMD=dependabot
+DEPENDABOT_CMD=dependabot
 # But a local downloaded file in CI
-DEPENDABOT_CMD=./dependabot
+#DEPENDABOT_CMD=./dependabot
 # Clean temporary work files from previous executions
 rm -f update-result.json
 rm -f update-job.yml
@@ -29,7 +29,7 @@ echo ""
 
 # Dependabot will set the result in a json that will be used to create the MRs
 $DEPENDABOT_CMD update -f update-job.yml --timeout 20m > update-result.json
-cat update-result.json
+#cat update-result.json
 exit
 
 # Two additional parameters (label and assignee)

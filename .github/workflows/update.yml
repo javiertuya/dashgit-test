@@ -34,8 +34,8 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-          DOCKER_USERNAME: ""
-          DOCKER_PASSWORD: ""
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         #run: ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java 810786
         #run: ./update.sh jobs/nuget.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main .NET 0
         run: ./update.sh jobs/docker.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /dockerfiles main docker 810786
