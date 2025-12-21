@@ -8,20 +8,32 @@
 
 set -euo pipefail
 
-if [ $# -ne 1 ]; then
-  echo "Usage: $0 <result.json>"
+if [ $# -ne 3 ]; then
+  echo "Usage: $0 <result.json> <hostname-with-path> <repo>"
   exit 1
 fi
 
 INPUT="$1"
+HOSTNAME="$2"
+REPO="$3"
+echo "*** Creating gitlab MR in $HOSTNAME for repo $REPO ***"
 
+if [ -z "$HOSTNAME" ]; then
+  echo "Error: HOSTNAME parameter is not set or empty."
+  exit 1
+fi
+if [ -z "$REPO" ]; then
+  echo "Error: REPO parameter is not set or empty."
+  exit 1
+fi
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
 if [ -z "$GITLAB_TOKEN" ]; then
   echo "Error: GITLAB_TOKEN environment variable is not set or empty."
   exit 1
 fi
-GITLAB_REPO="${GITLAB_REPO:-gitlab.com/javiertuya/dashgit-test}"
-GITLAB_REPO_URL="https://oauth2:$GITLAB_TOKEN@$GITLAB_REPO"
+
+# Commits are creted in REPO_DIR as temporary work folder and pushed to GITLAB_REPO_URL
+GITLAB_REPO_URL="https://oauth2:$GITLAB_TOKEN@$HOSTNAME/$REPO"
 REPO_DIR="gitlab-repo"
 
 # Clean and clone the GitLab repository into a subdirectory

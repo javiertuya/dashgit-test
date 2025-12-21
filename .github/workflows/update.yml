@@ -23,18 +23,23 @@ jobs:
           tar xzvf *.tar.gz >/dev/null 2>&1
           ./dependabot --version
 
-      - name: Run Dependabot
-        env:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main
+
+#      - name: Run Dependabot
+#        env:
         #  # GITHUB_TOKEN shows an example of how Dependabot CLI can be used with secrets.
         #  GITHUB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         # Que token tengo que poner si es repo privado de gitlab?
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-        run: |
-          ./dependabot update -f jobs/maven.gitlab.com.yml --timeout 20m >> result.json || true
+#          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+#        run: |
+#          ./dependabot update -f jobs/maven.gitlab.com.yml --timeout 20m >> result.json || true
 
-      - name: Create PRs
-        env:
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+#      - name: Create PRs
+#        env:
+#          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
           # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
-          GH_TOKEN: ${{ github.token }}
-        run: bash create.sh result.json
+#          GH_TOKEN: ${{ github.token }}
+#        run: bash create.sh result.json
