@@ -9,7 +9,7 @@
 set -euo pipefail
 
 if [ $# -ne 6 ]; then
-  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch> <label>"
+  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch> <label> <assignee-id-or-0"
   exit 1
 fi
 
