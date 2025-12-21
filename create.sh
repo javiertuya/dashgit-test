@@ -83,10 +83,12 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
     project="javiertuya/dashgit-test"
     project_id=${project//\//%2F}
     curl -X POST \
+      -o ./response.json \
       -H "Authorization: Bearer $GITLAB_TOKEN" \
       -H "Content-Type: application/json" \
       -d "{\"title\":\"$PR_TITLE_JSON\",\"description\":\"$PR_BODY_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\"}" \
       "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
+    cat response.json
   fi
 
   # Return to main branch for next PR
