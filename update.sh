@@ -9,6 +9,9 @@
 #DEPENDABOT_CMD=dependabot
 # But a local downloaded file in CI
 DEPENDABOT_CMD=./dependabot
+# Clean temporary work files from previous executions
+rm -f update-result.json
+rm -f update-job.yml
 
 # The job configuration file must be preprocessed because dependabot CLI does not replaces
 # environment variables, except the credentials.password

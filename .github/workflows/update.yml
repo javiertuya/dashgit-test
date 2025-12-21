@@ -17,7 +17,7 @@ jobs:
       - name: Prepare environment for nuget updates
         uses: actions/setup-dotnet@v5
         with:
-            dotnet-version: '8.0.x'
+            dotnet-version: '10.0.x'
 
       - name: Download Dependabot CLI
         env:
