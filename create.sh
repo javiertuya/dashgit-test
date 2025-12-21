@@ -78,21 +78,19 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   if git diff --quiet origin/main "$BRANCH_NAME"; then
     echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
   else
-    echo "*** Body content start ***"
-    echo "$PR_BODY"
-    echo "*** Body content end ***"
-    PR_TITLE_JSON=${PR_TITLE//\"/\\\"}
-    PR_BODY_JSON=${PR_BODY//\"/\\\"}
     project="javiertuya/dashgit-test"
     project_id=${project//\//%2F}
+    # Use jq to create JSON payload (avoiding issues with special characters)
+    jq -n \
+      --arg title "$PR_TITLE" \
+      --arg description "$PR_BODY" \
+      --arg source_branch "$BRANCH_NAME" \
+      '{title: $title, description: $description, source_branch: $source_branch, target_branch: "main", labels: "dependencies"}' | \
     curl -X POST \
-      -o ./response.json \
       -H "Authorization: Bearer $GITLAB_TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"title\":\"$PR_TITLE_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\",\"assignee_id\":0,\"remove_source_branch\":true}" \
+      -d @- \
       "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
-    echo "Response from GitLab API:"
-    cat response.json
   fi
 #      -d "{\"title\":\"$PR_TITLE_JSON\",\"description\":\"$PR_BODY_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\"}" \
 
