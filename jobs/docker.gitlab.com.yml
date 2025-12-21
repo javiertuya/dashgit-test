@@ -4,7 +4,7 @@ job:
     - dependency-type: direct
       update-type: all
   ignore:
-    - dependency-name: "dotnet*"
+    - dependency-name: "dotnet/aspnet"
       versions: [ ">=9" ]
   source:
     provider: gitlab
