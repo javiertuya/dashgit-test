@@ -77,7 +77,6 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   if git diff --quiet origin/main "$BRANCH_NAME"; then
     echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
   else
-    sleep 10
     PR_TITLE_JSON=${PR_TITLE//\"/\\\"}
     PR_BODY_JSON=${PR_BODY//\"/\\\"}
     project="javiertuya/dashgit-test"
@@ -86,7 +85,7 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
       -o ./response.json \
       -H "Authorization: Bearer $GITLAB_TOKEN" \
       -H "Content-Type: application/json" \
-      -d "{\"title\":\"$PR_TITLE_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\"}" \
+      -d "{\"title\":\"$PR_TITLE_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\",\"assignee_id\":810786,\"remove_source_branch\":true}" \
       "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
     cat response.json
   fi
