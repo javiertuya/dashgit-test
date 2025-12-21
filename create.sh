@@ -71,12 +71,13 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   git commit -m "$COMMIT_MSG"
   echo "pushing changes to $BRANCH_NAME"
   git push -f origin "$BRANCH_NAME"
-  echo "Creating Merge Request for $BRANCH_NAME"
+  echo "Creating Merge Request for $BRANCH_NAME with title: $PR_TITLE"
 
   # Create MR using GitLab API
   if git diff --quiet origin/main "$BRANCH_NAME"; then
     echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
   else
+    sleep 5
     PR_TITLE_JSON=${PR_TITLE//\"/\\\"}
     PR_BODY_JSON=${PR_BODY//\"/\\\"}
     project="javiertuya/dashgit-test"
