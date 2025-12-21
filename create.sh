@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-if [ $# -ne 5 ]; then
+if [ $# -ne 6 ]; then
   echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch> <label>"
   exit 1
 fi
@@ -37,8 +37,9 @@ if [ -z "$LABEL" ]; then
   echo "Error: LABEL parameter is not set or empty."
   exit 1
 fi
-if [ -z "$ASSIGNEE" ]; then # defaults to 0, no assignee
-  ASSIGNEE = 0
+if [ -z "$ASSIGNEE" ]; then # 0: no assignee
+  echo "Error: ASSIGNEE parameter is not set or empty."
+  exit 1
 fi
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
 if [ -z "$GITLAB_TOKEN" ]; then
