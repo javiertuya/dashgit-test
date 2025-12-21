@@ -21,26 +21,7 @@ LABEL="$5"
 ASSIGNEE="$6"
 echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH , label: $LABEL, assignee: $ASSIGNEE ***"
 
-if [ -z "$HOSTNAME" ]; then
-  echo "Error: HOSTNAME parameter is not set or empty."
-  exit 1
-fi
-if [ -z "$REPO" ]; then
-  echo "Error: REPO parameter is not set or empty."
-  exit 1
-fi
-if [ -z "$TARGET_BRANCH" ]; then
-  echo "Error: TARGET_BRANCH parameter is not set or empty."
-  exit 1
-fi
-if [ -z "$LABEL" ]; then
-  echo "Error: LABEL parameter is not set or empty."
-  exit 1
-fi
-if [ -z "$ASSIGNEE" ]; then # 0: no assignee
-  echo "Error: ASSIGNEE parameter is not set or empty."
-  exit 1
-fi
+# In addition to the parameters, the gitlab token must be set via an environment variable
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
 if [ -z "$GITLAB_TOKEN" ]; then
   echo "Error: GITLAB_TOKEN environment variable is not set or empty."
