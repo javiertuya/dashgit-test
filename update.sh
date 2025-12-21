@@ -3,7 +3,7 @@
 # Performs the full update process by running Dependabot CLI and then creating/updating PRs.
 
 # Example usage:
-# ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main
+# ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java
 
 # Dependabot command is a global command if installed using go (in windows)
 #DEPENDABOT_CMD=dependabot
@@ -28,4 +28,4 @@ echo ""
 $DEPENDABOT_CMD update -f update-job.yml --timeout 20m > update-result.json
 #cat update-result.json
 
-./create.sh update-result.json $2$3 $5 $7
+./create.sh update-result.json $2$3 $5 $7 $8

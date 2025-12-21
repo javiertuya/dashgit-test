@@ -8,8 +8,8 @@
 
 set -euo pipefail
 
-if [ $# -ne 4 ]; then
-  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch>"
+if [ $# -ne 5 ]; then
+  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch> <label>"
   exit 1
 fi
 
@@ -17,7 +17,8 @@ INPUT="$1"
 HOSTNAME="$2"
 REPO="$3"
 TARGET_BRANCH="$4"
-echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH ***"
+LABEL="$5"
+echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH , label: $LABEL ***"
 
 if [ -z "$HOSTNAME" ]; then
   echo "Error: HOSTNAME parameter is not set or empty."
@@ -29,6 +30,10 @@ if [ -z "$REPO" ]; then
 fi
 if [ -z "$TARGET_BRANCH" ]; then
   echo "Error: TARGET_BRANCH parameter is not set or empty."
+  exit 1
+fi
+if [ -z "$LABEL" ]; then
+  echo "Error: LABEL parameter is not set or empty."
   exit 1
 fi
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
@@ -45,7 +50,6 @@ REPO_DIR="gitlab-repo"
 rm -rf "$REPO_DIR"
 git clone "$GITLAB_REPO_URL" "$REPO_DIR"
 cd "$REPO_DIR"
-ls -la
 
 git config --global user.email "support@gitlab.com"
 git config --global user.name "Dependabot Standalone"
@@ -103,7 +107,8 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
       --arg description "$PR_BODY" \
       --arg source_branch "$BRANCH_NAME" \
       --arg target_branch "$TARGET_BRANCH" \
-      '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: "dependencies", assignee_id: 810786, remove_source_branch: true}' | \
+      --arg labels "dependencies,$LABEL" \
+      '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: $labels, assignee_id: 810786, remove_source_branch: true}' | \
     curl -X POST \
       -H "Authorization: Bearer $GITLAB_TOKEN" \
       -H "Content-Type: application/json" \
