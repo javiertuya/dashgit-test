@@ -3,7 +3,7 @@ job:
   #allowed-updates:
   #  - dependency-type: direct
   #    update-type: all
-  ignore:
+  ignore-conditions:
     - dependency-name: "dotnet/aspnet"
       versions: [ ">= 9" ] 
     - dependency-name: "gitlab/gitlab-ce"
