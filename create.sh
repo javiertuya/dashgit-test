@@ -8,8 +8,8 @@
 
 set -euo pipefail
 
-if [ $# -ne 3 ]; then
-  echo "Usage: $0 <result.json> <hostname-with-path> <repo>"
+if [ $# -ne 4 ]; then
+  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch>"
   exit 1
 fi
 
