@@ -21,3 +21,7 @@ credentials:
     host: $GH_HOST
     username: $GH_USERNAME
     password: $GITLAB_TOKEN
+  - type: docker_registry
+    registry: mcr.microsoft.com
+    username: $DOCKER_USERNAME
+    password: $DOCKER_PASSWORD
