@@ -14,10 +14,10 @@ jobs:
       - name: Checkout GitHub repo
         uses: actions/checkout@v6
 
-      - name: Prepare environment for nuget updates
-        uses: actions/setup-dotnet@v5
-        with:
-            dotnet-version: '10.0.x'
+#      - name: Prepare environment for nuget updates
+#        uses: actions/setup-dotnet@v5
+#        with:
+#            dotnet-version: '10.0.x'
 
       - name: Download Dependabot CLI
         env:
@@ -34,8 +34,8 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-        #run: ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java 810786
-        run: ./update.sh jobs/nuget.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main .NET 0
+        run: ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java 810786
+        #run: ./update.sh jobs/nuget.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main .NET 0
 
 #      - name: Run Dependabot
 #        env:
