@@ -16,7 +16,8 @@ fi
 INPUT="$1"
 HOSTNAME="$2"
 REPO="$3"
-echo "*** Creating gitlab MR in $HOSTNAME for repo $REPO ***"
+TARGET_BRANCH="$4"
+echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH ***"
 
 if [ -z "$HOSTNAME" ]; then
   echo "Error: HOSTNAME parameter is not set or empty."
@@ -24,6 +25,10 @@ if [ -z "$HOSTNAME" ]; then
 fi
 if [ -z "$REPO" ]; then
   echo "Error: REPO parameter is not set or empty."
+  exit 1
+fi
+if [ -z "$TARGET_BRANCH" ]; then
+  echo "Error: TARGET_BRANCH parameter is not set or empty."
   exit 1
 fi
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
@@ -97,7 +102,8 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
       --arg title "$PR_TITLE" \
       --arg description "$PR_BODY" \
       --arg source_branch "$BRANCH_NAME" \
-      '{title: $title, description: $description, source_branch: $source_branch, target_branch: "main", labels: "dependencies", assignee_id: 810786, remove_source_branch: true}' | \
+      --arg target_branch "$TARGET_BRANCH" \
+      '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: "dependencies", assignee_id: 810786, remove_source_branch: true}' | \
     curl -X POST \
       -H "Authorization: Bearer $GITLAB_TOKEN" \
       -H "Content-Type: application/json" \

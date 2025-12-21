@@ -26,4 +26,6 @@ echo ""
 
 # Dependabot will set the result in a json that will be used to create the MRs
 $DEPENDABOT_CMD update -f update-job.yml --timeout 20m > update-result.json
-./create.sh update-result.json $2$3 $5
+#cat update-result.json
+
+./create.sh update-result.json $2$3 $5 $7
