@@ -74,6 +74,7 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   echo "Creating Merge Request for $BRANCH_NAME with title: $PR_TITLE"
 
   # Create MR using GitLab API
+  # Set assignee_id=810786 to test with assignee
   if git diff --quiet origin/main "$BRANCH_NAME"; then
     echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
   else
@@ -87,6 +88,7 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
       -H "Content-Type: application/json" \
       -d "{\"title\":\"$PR_TITLE_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\",\"assignee_id\":810786,\"remove_source_branch\":true}" \
       "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
+    echo "Response from GitLab API:"
     cat response.json
   fi
 #      -d "{\"title\":\"$PR_TITLE_JSON\",\"description\":\"$PR_BODY_JSON\",\"source_branch\":\"$BRANCH_NAME\",\"target_branch\":\"main\",\"labels\":\"dependencies\"}" \
