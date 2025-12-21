@@ -10,6 +10,7 @@ if [ -f "dependabot"]; then # Dependabot command a local downloaded file in CI
 else # But a global command that must be installed using go (in windows)
   DEPENDABOT_CMD=dependabot
 fi
+echo "Dependabot CLI command: $DEPENDABOT_CMD"
 # Clean temporary work files from previous executions
 rm -f update-result.json
 rm -f update-job.yml
