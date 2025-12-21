@@ -5,7 +5,7 @@
 # Example usage:
 # ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test / main java 0
 
-if [ -f "dependabot"]; then # Dependabot command a local downloaded file in CI
+if [ -f "dependabot" ]; then # Dependabot command a local downloaded file in CI
   DEPENDABOT_CMD=./dependabot
 else # But a global command that must be installed using go (in windows)
   DEPENDABOT_CMD=dependabot
