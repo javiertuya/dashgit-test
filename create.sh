@@ -19,7 +19,11 @@ REPO="$3"
 TARGET_BRANCH="$4"
 LABEL="$5"
 ASSIGNEE="$6"
+REPO_DIR="update-workdir"
+
+echo "**************************************************************************************************"
 echo "*** Creating gitlab MRs in $HOSTNAME for repo: $REPO, target branch: $TARGET_BRANCH , label: $LABEL, assignee: $ASSIGNEE ***"
+echo "**************************************************************************************************"
 
 # In addition to the parameters, the gitlab token must be set via an environment variable
 GITLAB_TOKEN="${GITLAB_TOKEN:-}"
@@ -30,7 +34,6 @@ fi
 
 # Commits are creted in REPO_DIR as temporary work folder and pushed to GITLAB_REPO_URL
 GITLAB_REPO_URL="https://oauth2:$GITLAB_TOKEN@$HOSTNAME/$REPO"
-REPO_DIR="gitlab-repo"
 
 # Clean and clone the GitLab repository into a subdirectory
 rm -rf "$REPO_DIR"
@@ -74,37 +77,35 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   done
 
   # Commit and push
-  echo "commiting changes to $BRANCH_NAME"
+  echo "Committing and pushing changes to $BRANCH_NAME"
   git commit -m "$COMMIT_MSG"
-  echo "pushing changes to $BRANCH_NAME"
   git push -f origin "$BRANCH_NAME"
-  echo "Creating Merge Request for $BRANCH_NAME with title: $PR_TITLE"
 
   # Create MR using GitLab API
   # Set assignee_id=810786 to test with assignee
-  if git diff --quiet origin/main "$BRANCH_NAME"; then
-    echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
-  else
-    project="javiertuya/dashgit-test"
-    project_id=${project//\//%2F}
-    # Use jq to create JSON payload (avoiding issues with special characters)
-    jq -n \
-      --arg title "$PR_TITLE" \
-      --arg description "$PR_BODY" \
-      --arg source_branch "$BRANCH_NAME" \
-      --arg target_branch "$TARGET_BRANCH" \
-      --arg labels "dependencies,$LABEL" \
-      --arg assignee "$ASSIGNEE" \
-      '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: $labels, assignee_id: $assignee, remove_source_branch: true}' | \
-    curl -X POST \
-      -H "Authorization: Bearer $GITLAB_TOKEN" \
-      -H "Content-Type: application/json" \
-      -d @- \
-      "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
-  fi
+  #if git diff --quiet origin/main "$BRANCH_NAME"; then
+  #  echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
+  #else
+  echo "Creating Merge Request for $BRANCH_NAME with title: $PR_TITLE"
+  project_id=${REPO//\//%2F}
+  # Use jq to create JSON payload (to avoid issues with special characters)
+  jq -n \
+    --arg title "$PR_TITLE" \
+    --arg description "$PR_BODY" \
+    --arg source_branch "$BRANCH_NAME" \
+    --arg target_branch "$TARGET_BRANCH" \
+    --arg labels "dependencies,$LABEL" \
+    --arg assignee "$ASSIGNEE" \
+    '{title: $title, description: $description, source_branch: $source_branch, target_branch: $target_branch, labels: $labels, assignee_id: $assignee, remove_source_branch: true}' | \
+  curl -X POST \
+    -H "Authorization: Bearer $GITLAB_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d @- \
+    "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
+  #fi
 
-  # Return to main branch for next PR
-  git checkout main
+  echo "Returning to main branch for next PR"
+  git checkout $TARGET_BRANCH
 done
 
 cd ..
