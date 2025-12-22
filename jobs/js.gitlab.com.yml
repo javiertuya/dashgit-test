@@ -9,7 +9,7 @@ job:
     hostname: $GH_HOST$GH_PATH
     api-endpoint: https://$GH_HOST$GH_PATH/api/v4/
     repo: $GH_REPO
-    directory: $GH_DIRECTORY
+    directories: [ $GH_DIRECTORY ]
     branch: $GH_BRANCH
 credentials:
   - type: git_source

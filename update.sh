@@ -17,6 +17,7 @@ rm -f update-job.yml
 
 # The job configuration file must be preprocessed because dependabot CLI does not replaces
 # environment variables, except the credentials.password
+# Multiple directories are allowed if separated with comma and without blank spaces
 sed -e "s|\$GH_HOST|$2|" \
     -e "s|\$GH_PATH|$3|" \
     -e "s|\$GH_USERNAME|$4|" \
