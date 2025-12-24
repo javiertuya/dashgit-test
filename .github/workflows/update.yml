@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # To use GitHub CLI in a GitHub Actions workflow, set the GL_TOKEN environment variable.
-      GL_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
       # authenticate agains the git server
       GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
       # The log shows a 401 error when accesing the docker registry, but it seems that setting the credentials is not needed
@@ -25,7 +25,7 @@ jobs:
       - name: Download Dependabot CLI
         env:
           # To use GitHub CLI in a GitHub Actions workflow, set the GL_TOKEN environment variable.
-          GL_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release download --repo dependabot/cli -p "*linux-amd64.tar.gz"
           tar xzvf *.tar.gz >/dev/null 2>&1
