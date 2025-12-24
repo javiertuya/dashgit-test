@@ -9,7 +9,7 @@
 set -euo pipefail
 
 if [ $# -ne 6 ]; then
-  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch> <label> <assignee-id-or-0"
+  echo "Usage: $0 <result-json-file> <hostname-with-path> <repo> <target-branch> <label> <assignee-id-or-0>"
   exit 1
 fi
 
@@ -81,11 +81,6 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
   git commit -m "$COMMIT_MSG"
   git push -f origin "$BRANCH_NAME"
 
-  # Create MR using GitLab API
-  # Set assignee_id=810786 to test with assignee
-  #if git diff --quiet origin/main "$BRANCH_NAME"; then
-  #  echo "Branch $BRANCH_NAME is up to date with main, skipping MR creation."
-  #else
   echo "Creating Merge Request for $BRANCH_NAME with title: $PR_TITLE"
   project_id=${REPO//\//%2F}
   # Use jq to create JSON payload (to avoid issues with special characters)
@@ -102,7 +97,6 @@ jq -c 'select(.type == "create_pull_request")' "../$INPUT" | while read -r event
     -H "Content-Type: application/json" \
     -d @- \
     "https://gitlab.com/api/v4/projects/$project_id/merge_requests" || echo "Failed to create MR"
-  #fi
 
   echo "Returning to main branch for next PR"
   git checkout $TARGET_BRANCH

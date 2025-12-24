@@ -11,8 +11,8 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     env:
-      # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
-      GH_TOKEN: ${{ github.token }}
+      # To use GitHub CLI in a GitHub Actions workflow, set the GL_TOKEN environment variable.
+      GL_TOKEN: ${{ github.token }}
       # authenticate agains the git server
       GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
       # The log shows a 401 error when accesing the docker registry, but it seems that setting the credentials is not needed
@@ -22,15 +22,10 @@ jobs:
       - name: Checkout GitHub repo
         uses: actions/checkout@v6
 
-#      - name: Prepare environment for nuget updates
-#        uses: actions/setup-dotnet@v5
-#        with:
-#            dotnet-version: '10.0.x'
-
       - name: Download Dependabot CLI
         env:
-          # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
-          GH_TOKEN: ${{ github.token }}
+          # To use GitHub CLI in a GitHub Actions workflow, set the GL_TOKEN environment variable.
+          GL_TOKEN: ${{ github.token }}
         run: |
           gh release download --repo dependabot/cli -p "*linux-amd64.tar.gz"
           tar xzvf *.tar.gz >/dev/null 2>&1
@@ -39,24 +34,8 @@ jobs:
           chmod +x ./update.sh
           chmod +x ./create.sh
 
-      #- run: ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /java main java 0
-      #- run: ./update.sh jobs/docker.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /docker main docker 810786
-      - run: ./update.sh jobs/js.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /js/app,/js/test main javascript 810786
+      - run: ./update.sh jobs/maven.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /java main 0
+      - run: ./update.sh jobs/docker.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /docker main 810786
+      - run: ./update.sh jobs/js.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /js/app,/js/test main 810786
       #.NET fails (Microsoft.Build, Version=15.1.0.0 not found): https://github.com/dependabot/cli/issues/517
-      #- run: ./update.sh jobs/nuget.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /net main .NET 0
-
-#      - name: Run Dependabot
-#        env:
-        #  # GITHUB_TOKEN shows an example of how Dependabot CLI can be used with secrets.
-        #  GITHUB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-        # Que token tengo que poner si es repo privado de gitlab?
-#          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-#        run: |
-#          ./dependabot update -f jobs/maven.gitlab.com.yml --timeout 20m >> result.json || true
-
-#      - name: Create PRs
-#        env:
-#          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-          # To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable.
-#          GH_TOKEN: ${{ github.token }}
-#        run: bash create.sh result.json
+      #- run: ./update.sh jobs/nuget.gitlab.com.yml gitlab.com "" javiertuya javiertuya/dashgit-test /net main 0

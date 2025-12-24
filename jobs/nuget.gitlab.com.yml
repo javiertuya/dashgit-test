@@ -1,18 +1,15 @@
 job:
   package-manager: nuget
-  allowed-updates:
-    - dependency-type: direct
-      update-type: all
   source:
     provider: gitlab
     # hostname should be the host with the added path (if any) to uniquely identify the GitLab instance.
-    hostname: $GH_HOST$GH_PATH
-    api-endpoint: https://$GH_HOST$GH_PATH/api/v4/
-    repo: $GH_REPO
-    directories: [ $GH_DIRECTORY ]
-    branch: $GH_BRANCH
+    hostname: $GL_HOST$GL_PATH
+    api-endpoint: https://$GL_HOST$GL_PATH/api/v4/
+    repo: $GL_REPO
+    directories: [ $GL_DIRECTORY ]
+    branch: $GL_BRANCH
 credentials:
   - type: git_source
-    host: $GH_HOST
-    username: $GH_USERNAME
+    host: $GL_HOST
+    username: $GL_USERNAME
     password: $GITLAB_TOKEN
